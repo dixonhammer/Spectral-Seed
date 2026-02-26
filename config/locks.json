@@ -1,5 +1,14 @@
 {
-  "delta_inv_a1_GUT": 0.0,
-  "delta_inv_a2": 0.0,
-  "delta_inv_a3": 0.0
+  "Lambda_GeV": 1.0225199171797158e+18,
+  "gU": 0.496729413289805,
+  "kY": 1.3198475960136604,
+  "Delta2_add_to_inv_alpha2": -2.3534464016282834,
+  "mu_on_GeV": 238073970.4658547,
+  "trace_summary": {
+    "K_common": 20.0,
+    "K1_from_spectral": 26.39695192027321
+  },
+  "anomalies_ok": true,
+  "mu_on": 238073970.4658547,
+  "Delta2": -2.3534464016282834
 }
