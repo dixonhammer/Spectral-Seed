@@ -1,0 +1,22 @@
+{
+  "Lambda2": 1.0455469810292129e+36,
+  "Lambda": 1.0225199171797158e+18,
+  "pref_a4": 0.05066059182116889,
+  "K": {
+    "K1": 20.0,
+    "K1_GUT": 12.0,
+    "K2": 12.0,
+    "K3": 12.0,
+    "K_common": 20.0
+  },
+  "gU": 0.496729413289805,
+  "conventions_used": {
+    "G_Newton_GeV^-2": 6.707e-39,
+    "dim_spin": 4,
+    "dim_internal_Weyl": 42,
+    "dim_internal_quaternionic": 84,
+    "trace_Tr1": 336,
+    "f2": 1.0,
+    "f0": 1.0
+  }
+}
