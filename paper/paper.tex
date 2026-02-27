@@ -1,1 +1,363 @@
-Placeholder
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{silence}
+\WarningFilter{latex}{Command \showhyphens has changed}
+\usepackage{microtype}
+\usepackage{xurl}
+\usepackage{physics}
+\usepackage{slashed}
+\usepackage{hyperref}
+\usepackage{orcidlink}
+
+\title{Spectral Seed: Module-Native Locks and a Finite \texorpdfstring{$SU(2)$}{SU(2)} Matching Jump}
+\author{Dixon S. Hammer\,\orcidlink{0009-0003-8960-8484}}
+\date{February 27, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a reproducible, audit-grade chain of ``spectral locks'' in an almost-commutative spectral framework, culminating in a finite $SU(2)$ inverse-coupling matching jump $\Delta_2$ whose onset scale is derived from discrete module/trace invariants rather than low-energy targets. We refer to this minimal, checkable generating mechanism as a \emph{spectral seed}. The construction uses the spectral action principle for an almost-commutative geometry and deterministic two-loop renormalization group (RG) running. The central result is a discrete rule yielding an integer N from trace invariants, which fixes a dimensionless spectral threshold $\sigma_H = 2^{-N}$; the repository then uses $\sigma_H$ to set the scale of the minimal forced-sector Dirac block whose smallest nonzero singular value equals $\sigma_H$ (as recorded by the emitted artifacts). This determines an onset scale $\mu_{\mathrm{on}}=\sigma_H \Lambda$ and hence a finite matching correction
+\[
+\Delta_2 = -\frac{b_{2H}}{4\pi}\ln\!\left(\frac{\Lambda}{\mu_{\mathrm{on}}}\right),
+\qquad b_{2H}=\frac{4}{3},
+\]
+where $\Delta_2$ is stored and applied operationally as an additive shift to $1/\alpha_2$ consistent with the repository convention. We provide script-level provenance and SHA-256 hashes for all artifacts used to compute $(\sigma_H,\mu_{\mathrm{on}},\Delta_2)$ and to propagate these locked inputs through deterministic two-loop RG running to electroweak-scale observables.
+\end{abstract}
+
+\tableofcontents
+
+\section{Motivation and scope}
+The spectral action principle provides a geometric route to gauge and gravitational dynamics from a single Dirac operator on an almost-commutative spectral triple \cite{ChamseddineConnes1996,ChamseddineConnes1997}.
+A recurring practical concern in such approaches is how to avoid inserting threshold scales or matching shifts ``by hand'' in a way that obscures whether a result is genuinely forced by the internal data. In this note we isolate one such point: a finite $SU(2)$ inverse-coupling jump $\Delta_2$ associated with a forced neutral Dirac $SU(2)$ doublet sector.
+
+\paragraph{Scope.}
+Our goal is narrow and audit-focused:
+\begin{itemize}
+  \item derive the onset scale $\mu_{\mathrm{on}}$ and the corresponding $\Delta_2$ from \emph{module-native discrete data} (integers from trace invariants), not from $M_Z$ targets;
+  \item provide a minimal honest artifact chain that can be checked end-to-end by re-running scripts and verifying hashes (with provenance);
+  \item propagate only the locked inputs $(\Lambda,g_U,k_Y,\Delta_2)$ through deterministic two-loop RG running and report the resulting electroweak-scale observables.
+\end{itemize}
+\noindent\textbf{No low-energy inference.}
+The locked quantities $\sigma_H$, $\mu_{\mathrm{on}}$, and $\Delta_2$ are derived exclusively from module/trace invariants and do not use low-energy targets (e.g.\ $M_Z$, $\sin^2\theta_W$, $\alpha_{\mathrm{em}}$). Low-energy quantities enter only downstream as outputs of RG running, not as inputs to the lock derivation.
+We do \emph{not} claim a full reconstruction of the Standard Model finite Dirac operator $D_F$ in this version. Instead, we construct the minimal forced sector required to define and audit $\sigma_H$ and thus $\Delta_2$.
+
+\paragraph{Knife-edge falsifiable claim (discrete lock chain).}
+The core claim of this note is a discrete, non-tunable chain of implications that either holds as a whole or fails decisively. Starting from trace/module invariants emitted by the spectral content,
+\begin{equation}
+K_{\mathrm{common}},\quad \sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)},
+\end{equation}
+we define an integer
+\begin{equation}
+N \;=\; \mathrm{round}\!\left(K_{\mathrm{common}} + 2\sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)}\right),
+\qquad
+\sigma_H \;=\; 2^{-N},
+\qquad
+\mu_{\mathrm{on}} \;=\; \sigma_H \Lambda,
+\end{equation}
+and hence a finite matching shift
+\begin{equation}
+\Delta_2 \;=\; -\frac{b_{2H}}{4\pi}\ln\!\left(\frac{\Lambda}{\mu_{\mathrm{on}}}\right),
+\qquad b_{2H}=\frac{4}{3}.
+\end{equation}
+Here and throughout, $\Delta_2$ is defined (and stored in the artifacts) as an additive shift to $1/\alpha_2$ associated with the forced sector between $\mu_{\mathrm{on}}$ and $\Lambda$, implemented consistently with the repository convention described in Section~\ref{sec:delta2}. In particular, in the locked dataset reproduced by the repository, the discrete invariants yield $N=32$ and therefore a fixed $(\sigma_H,\mu_{\mathrm{on}},\Delta_2)$. If the module/trace invariants change, $N$ changes discretely, which forces a discrete change in $\sigma_H$ and therefore shifts $(\mu_{\mathrm{on}},\Delta_2)$ with no continuous tuning available. Any modification of the underlying discrete invariants (or any hidden dependence on low-energy inputs) breaks the chain and is detected by the audit scripts. This makes the mechanism ``knife-edge'': the lock either reproduces exactly from the declared inputs or the model is falsified at the level of the artifact chain.
+
+\section{Framework: spectral action and almost-commutative geometry}
+We work within the spectral action framework for an almost-commutative spectral triple \cite{ChamseddineConnes1996,ChamseddineConnes1997}.  The action (including fermions) is taken to be
+\begin{equation}
+S \;=\; \mathrm{Tr}\, f\!\left(\frac{D^2}{\Lambda^2}\right) \;+\; \langle \Psi, D\Psi\rangle,
+\qquad f(u)=e^{-u},
+\end{equation}
+built from a single Dirac operator $D$ and a cutoff scale $\Lambda$.  (The choice $f(u)=e^{-u}$ is a fixed convention in this note; no low-energy targets are used to determine any lock.)
+
+We assume an almost-commutative product geometry of the form
+\begin{equation}
+\mathcal{A} = C^\infty(M)\otimes \mathcal{A}_F,\qquad
+\mathcal{H} = L^2(M,S)\otimes \mathcal{H}_F,
+\end{equation}
+with Dirac operator
+\begin{equation}
+D = \slashed{D}_M\otimes 1 + \gamma_5 \otimes D_F,
+\end{equation}
+(with the usual real structure $J$ and grading $\gamma$ where appropriate). The bosonic part of the action is the first term $\mathrm{Tr}\, f(D^2/\Lambda^2)$, and the second term is the fermionic pairing.
+
+Throughout, we use the term \emph{spectral lock} to mean a derived quantity fixed by discrete trace/module content and normalization conventions (not by fitting to low-energy observables). In this version we do not attempt a full reconstruction of the complete finite operator $D_F$; we isolate only the trace invariants and the minimal forced finite sector required for the $\Delta_2$ lock chain.
+
+\section{Trace invariants, normalization, and hypercharge}
+\subsection{Trace invariants}
+We begin from a trace table over fermionic representations (three generations in the present dataset), producing:
+\begin{itemize}
+  \item base sums over representations (e.g.\ sums of $SU(2)$ fundamental Dynkin indices),
+  \item module normalization coefficients $c_i$,
+  \item totals $K_i$ and a common value $K_{\mathrm{common}}$ under the module’s declared common-normalization convention.
+\end{itemize}
+In our reproducible pipeline, these are written in \texttt{artifacts/ult\_trace\_table.json} (and a paper-ready table in \texttt{artifacts/ult\_trace\_table.tex}). In the locked dataset used here, the trace artifact encodes
+\begin{equation}
+K_{\mathrm{common}} = 20,\qquad \sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)} = 6.
+\end{equation}
+
+\noindent\textbf{Normalization note.}
+In this repository pipeline, $K_{\mathrm{common}}$ is treated as a fixed \emph{module normalization choice} (a common gauge-trace target) recorded in \texttt{config/locks.json}. Given this choice and the explicit Standard Model representation content, the trace script determines the corresponding coefficients $c_i$ and totals $K_i$ and then reports the derived ratio $k_Y=K_1/K_2$. This convention is explicit in the emitted provenance (including SHA-256 hashes) and is not inferred from low-energy observables.
+
+\subsection{Hypercharge normalization lock}
+A standard output of the trace normalization is the derived hypercharge normalization factor
+\begin{equation}
+k_Y = \frac{K_1}{K_2}.
+\end{equation}
+Operationally, our pipeline computes $K_1$ and $K_2$ from the explicit representation content and module normalizations, and then derives $k_Y$ as the ratio. For audit clarity, we additionally emit a target-free artifact \texttt{artifacts/ult\_kY\_pure.json} containing only $k_Y$ and provenance (used as the source of truth for the RG pipeline). For the present locked dataset,
+\begin{equation}
+k_Y = 1.3198475960136604.
+\end{equation}
+
+\subsection{Einstein--Hilbert normalization and the unification scale \texorpdfstring{$\Lambda$}{Lambda}}
+In the spectral action expansion, the Einstein--Hilbert term arises from the heat-kernel expansion of $\mathrm{Tr}\,f(D^2/\Lambda^2)$ and fixes the overall physical scale by matching its coefficient to the canonical normalization of the gravitational action once conventions are chosen \cite{ChamseddineConnes1996,ChamseddineConnes1997}. In this version, we treat $\Lambda$ as a \emph{declared high-scale normalization input} recorded in \texttt{config/constants.json} and sourced deterministically by the RG stage; a coefficient-level derivation from the heat-kernel expansion is deferred to follow-on work. The value used in the reproducible run is
+\begin{equation}
+\Lambda \approx 1.0225199172\times 10^{18}\ \mathrm{GeV},
+\end{equation}
+with full provenance and hashes enforced by the repository audit scripts (see \texttt{\path{src/platinum_check.py}}).
+
+\subsection{Unified coupling \texorpdfstring{$g_U$}{gU} from common gauge normalization}
+The same trace normalization that yields a common gauge-trace factor $K_{\mathrm{common}}$ also fixes a unified coupling normalization once the spectral action normalization convention is chosen. In this version we treat $g_U$ as a declared high-scale normalization input recorded in \texttt{config/constants.json}; a coefficient-level derivation from the heat-kernel expansion (including the $a_4$ matching) is deferred to follow-on work. In the repository this locked value is recorded in \texttt{config/constants.json} (and its provenance is checked by \texttt{src/platinum\_check.py}). The value used in the reproducible run is
+\begin{equation}
+g_U \approx 0.4967294133.
+\end{equation}
+In this note we emphasize audit-grade determinism: the pipeline does not fit $g_U$ to low-energy targets; it is sourced from the declared constants file and its provenance is checked by \texttt{src/platinum\_check.py}. (Here $\Lambda$ and $g_U$ are treated as \emph{declared high-scale normalization inputs}; extending this note to include a full coefficient-level derivation from the heat-kernel expansion is deferred to future work.)
+
+\section{Anomaly checks}
+\subsection{Local anomalies (triangle and mixed)}
+For consistency, we verify vanishing gauge and mixed anomalies \emph{per generation} in a left-handed convention (summing over the left-chiral multiplets listed in the trace table), including $U(1)^3$, $\mathrm{grav}^2 U(1)$, $SU(2)^2 U(1)$, and $SU(3)^2 U(1)$. These checks are computed from explicit Standard Model representation content and emitted in \texttt{\path{artifacts/ult_trace_table.json}}.
+
+\subsection{Global SU(2) anomaly (Witten parity)}
+A separate consistency condition is the global $SU(2)$ anomaly: an $SU(2)$ gauge theory with an odd number of left-handed $SU(2)$ doublets is inconsistent \cite{Witten1982}.
+Our pipeline computes the number of left-handed $SU(2)$ doublets per generation (including color multiplicity) and records the parity check. In the Standard Model content used here, this count is $4$ per generation (even), hence the Witten anomaly is absent. If the forced sector is a Dirac $SU(2)$ doublet (as assumed in the repository artifacts), it adds an \emph{even} number of left-handed $SU(2)$ doublets in left-chiral counting, hence does not change the Witten parity.
+
+\subsection{Effect of the forced neutral doublet}
+The finite matching mechanism below assumes an additional forced Dirac $SU(2)$ doublet sector with hypercharge $Y=0$. Because $Y=0$, adding this sector contributes zero to the local $U(1)$-type anomaly sums ($U(1)^3$, $\mathrm{grav}^2U(1)$, $SU(2)^2U(1)$, $SU(3)^2U(1)$). This statement is recorded explicitly in the trace artifact as an audit note.
+
+\section{A finite \texorpdfstring{$SU(2)$}{SU(2)} correction from a forced doublet sector}
+\subsection{Minimal forced-sector Dirac block}
+We assume (as an explicit modeling hypothesis for this note) that the internal module data includes a \emph{forced} neutral Dirac $SU(2)$ doublet sector. To define the corresponding spectral threshold without importing low-energy targets, the repository constructs a \emph{minimal honest} finite Dirac artifact consisting only of this sector:
+\begin{equation}
+\mathcal{H}_H = \mathrm{span}\{H_{L1},H_{L2},H_{R1},H_{R2}\},
+\end{equation}
+with a finite Dirac block
+\begin{equation}
+D_F\big|_{\mathcal{H}_H} =
+\begin{pmatrix}
+0 & 0 & m & 0\\
+0 & 0 & 0 & m\\
+m & 0 & 0 & 0\\
+0 & m & 0 & 0
+\end{pmatrix}.
+\end{equation}
+Here $m$ is a \emph{dimensionless} parameter in the same spectral normalization used throughout the pipeline. The repository chooses $m$ so that the smallest nonzero singular value of this forced-sector block equals the locked threshold $\sigma_H$ (as recorded in the emitted artifacts). Equivalently,
+\begin{equation}
+\sigma_H := \min\{\text{singular values of } D_F|_{\mathcal{H}_H} \text{ that are } > 0\} = |m|.
+\end{equation}
+
+\subsection{Discrete trace rule for \texorpdfstring{$N$}{N} and \texorpdfstring{$\sigma_H$}{sigmaH}}
+The key step is to avoid choosing $\sigma_H$ (or $\mu_{\mathrm{on}}$) by hand. We instead derive an integer $N$ from discrete trace invariants:
+\begin{equation}
+\boxed{N \;=\; \mathrm{round}\!\left(K_{\mathrm{common}} + 2\sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)}\right)}.
+\end{equation}
+In the present locked trace dataset,
+\begin{equation}
+K_{\mathrm{common}}=20,\qquad \sum T_{\mathrm{fund}}^{SU(2)}=6
+\quad\Longrightarrow\quad
+N = 20 + 2\cdot 6 = 32,
+\end{equation}
+and we define
+\begin{equation}
+\boxed{\sigma_H = 2^{-N}}.
+\end{equation}
+This rule is emitted as \texttt{artifacts/ult\_sigma\_integer\_rule.json} and is the preferred source for $\sigma_H$ in the forced-sector $D_F$ builder.
+In the current repository, $\sigma_H$ is treated as locked input data derived from the discrete trace rule and then realized by the minimal forced-sector block; a full construction of the corresponding block as a submatrix of a complete $D_F$ is deferred.
+
+\subsection{Heuristic principle behind the discrete onset rule}
+\label{sec:heuristic_principle}
+
+\paragraph{Goal.}
+The repository establishes an audit-grade fact: the integer
+\begin{equation}
+N \;=\; \mathrm{round}\!\left(K_{\mathrm{common}} + 2\sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)}\right)
+\label{eq:N_rule}
+\end{equation}
+is reproducibly computed from trace/module invariants and yields the locked scale
+\begin{equation}
+\sigma_H = 2^{-N},\qquad \mu_{\mathrm{on}}=\sigma_H\Lambda,
+\label{eq:sigma_mu}
+\end{equation}
+hence fixing $\Delta_2$ via \eqref{eq:delta2_def} below. The purpose of this subsection is not to prove \eqref{eq:N_rule} as a theorem, but to motivate it as the simplest discrete \emph{principle} compatible with the structure and with the audit constraints.
+
+\paragraph{Assumption set (explicit).}
+We assume only the following:
+\begin{enumerate}
+  \item \textbf{Discrete onset.} The forced sector turns on at a \emph{dimensionless} spectral threshold $\sigma_H\in(0,1)$ that is fixed by discrete internal data, i.e.\ it is not continuously tunable.
+  \item \textbf{Power-of-two quantization.} The module’s discrete structure selects $\sigma_H$ in a dyadic ladder,
+  \begin{equation}
+  \sigma_H = 2^{-N},\qquad N\in\mathbb{Z}_{>0},
+  \label{eq:dyadic}
+  \end{equation}
+  reflecting a discrete dyadic hierarchy assumption: the onset scale is quantized in powers of two by the underlying finite/module structure (so changes occur only by integer steps in $N$).
+  \item \textbf{Additivity in invariants.} The integer $N$ is an additive functional of the discrete trace invariants available \emph{in the same artifact that defines the lock} (here: $K_{\mathrm{common}}$ and the total $SU(2)$ fundamental index sum), with no dependence on low-energy observables.
+  \item \textbf{Minimality.} Among admissible integer-valued functionals, the chosen $N$ is the simplest one that is (i) dimensionless, (ii) invariant under relabelings within the trace table, and (iii) stable under small perturbations of continuous quantities (so only discrete jumps in the underlying module data can change it).
+\end{enumerate}
+
+\paragraph{Why $K_{\mathrm{common}}$ and $\sum T_{\mathrm{fund}}^{SU(2)}$ are the natural inputs.}
+The trace artifact contains two kinds of discrete data:
+(i) a \emph{common gauge-trace target} $K_{\mathrm{common}}$ (encoding the enforced common normalization across gauge factors in the module convention), and
+(ii) a \emph{representation-theoretic count} of $SU(2)$ doublet content via the summed Dynkin index $\sum T_{\mathrm{fund}}^{SU(2)}$ (for the fixed three-generation content used here). Both are integers/rationals determined by the representation content and normalization convention, and both remain meaningful without reference to $M_Z$ or any infrared targets.
+
+If a forced neutral $SU(2)$ doublet sector is the origin of the finite matching correction, then a natural expectation is that the discrete onset integer $N$ depends on:
+\begin{itemize}
+  \item the \emph{overall} common normalization scale set by the module convention (captured by $K_{\mathrm{common}}$), and
+  \item the \emph{amount of $SU(2)$ doublet structure} already present in the traced content (captured by $\sum T_{\mathrm{fund}}^{SU(2)}$).
+\end{itemize}
+
+\paragraph{A minimal additive ansatz.}
+By Assumption 3, we take $N$ to be additive in these two invariants:
+\begin{equation}
+N \approx a\,K_{\mathrm{common}} + b\,\sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)} ,
+\label{eq:N_ansatz}
+\end{equation}
+with $a,b$ fixed rational coefficients selected by minimality: they must yield an integer-valued, relabeling-invariant functional on the discrete trace data, with no continuous tunability. The simplest nontrivial choice is $a=1$ and $b=2$, yielding
+\begin{equation}
+N = \mathrm{round}\!\left(K_{\mathrm{common}} + 2\sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)}\right),
+\end{equation}
+which is exactly the rule emitted by \texttt{artifacts/ult\_sigma\_integer\_rule.json}. In the locked dataset,
+$K_{\mathrm{common}}=20$ and $\sum T_{\mathrm{fund}}^{SU(2)}=6$, giving $N=32$.
+
+\paragraph{Interpretation.}
+Under the dyadic quantization \eqref{eq:dyadic}, the effect of changing the module’s discrete invariants is \emph{not} a small continuous retuning of $\mu_{\mathrm{on}}$, but a discrete jump in $N$, hence an exponential jump in $\sigma_H$ and a corresponding logarithmic shift in $\Delta_2$. This is precisely the qualitative behavior required for the “knife-edge” character of the lock chain: the onset is stable under small perturbations yet changes decisively under discrete structural changes.
+
+\paragraph{Status.}
+This subsection is a \emph{heuristic derivation} intended to make the rule \eqref{eq:N_rule} look like a principle compatible with the discrete structure and audit constraints, rather than an arbitrary recipe. A theorem-level derivation (e.g.\ from an explicit module classification or a canonical quantized threshold functional) is deferred to follow-on work.
+
+\subsection{Onset scale and finite matching jump \texorpdfstring{$\Delta_2$}{Delta2}}
+\label{sec:delta2}
+In a spectral-action mode-counting interpretation, thresholds occur when a definite Dirac eigenvalue crosses the cutoff. The onset scale is fixed by
+\begin{equation}
+\boxed{\mu_{\mathrm{on}} = \sigma_H \Lambda}.
+\end{equation}
+We define $\Delta_2$ operationally in the same convention used by the repository: it is an additive
+shift to the inverse coupling that encodes the forced-sector contribution between $\mu_{\mathrm{on}}$
+and $\Lambda$. In the repository implementation this is realized as a UV boundary shift
+\[
+\left.\frac{1}{\alpha_2(\Lambda)}\right|_{\text{RG}} \;=\; \frac{1}{\alpha_2(\Lambda)} + d_2,
+\qquad d_2 := \Delta_2,
+\]
+while $\mu_{\mathrm{on}}$ is recorded in the provenance. At one loop this is equivalent to implementing
+the same correction as a step in $1/\alpha_2$ at $\mu_{\mathrm{on}}$; at two loops the two realizations
+differ by higher-order effects, and this note follows the repository convention.
+
+At one loop, integrating the forced-sector contribution to the $SU(2)$ running from $\mu_{\mathrm{on}}$
+up to $\Lambda$ yields the logarithmic shift in the inverse coupling. In the convention used in the
+code path, the forced neutral Dirac $SU(2)$ doublet sector is encoded via
+\begin{equation}
+\boxed{
+\Delta_2 \;=\; -\frac{b_{2H}}{4\pi}\ln\!\left(\frac{\Lambda}{\mu_{\mathrm{on}}}\right)
+}
+\qquad (b_{2H}=4/3).
+\label{eq:delta2_def}
+\end{equation}
+
+For the reproducible run documented by the repository pipeline:
+\begin{align}
+N &= 32,\\
+\sigma_H &= 2^{-32} \approx 2.3283064365\times 10^{-10},\\
+\Lambda &\approx 1.0225199172\times 10^{18}\ \mathrm{GeV},\\
+\mu_{\mathrm{on}} &= \sigma_H \Lambda \approx 2.3807397047\times 10^{8}\ \mathrm{GeV},\\
+\Delta_2 &\approx -2.3534464016.
+\end{align}
+
+\begin{table}[h!]
+\centering
+\caption{Locked quantities for the module-native $\Delta_2$ chain (values from repository artifacts).}
+\label{tab:locks}
+\begin{tabular}{ll}
+\toprule
+Quantity & Value \\
+\midrule
+$K_{\mathrm{common}}$ & $20$ \\
+$\sum_{\text{3 gens}} T_{\mathrm{fund}}^{SU(2)}$ & $6$ \\
+$N$ & $32$ \\
+$\sigma_H$ & $2^{-32}\approx 2.3283\times 10^{-10}$ \\
+$\Lambda$ [GeV] & $1.0225\times 10^{18}$ \\
+$\mu_{\mathrm{on}}$ [GeV] & $2.3807\times 10^{8}$ \\
+$\Delta_2$ (add to $1/\alpha_2$; repo uses $d_2=\Delta_2$ at $\Lambda$) & $-2.35345$ \\
+$k_Y$ & $1.3198475960$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Deterministic two-loop running to \texorpdfstring{$M_Z$}{MZ}}
+We propagate the locked high-scale inputs
+\begin{equation}
+(\Lambda,\ g_U,\ k_Y,\ \Delta_2)
+\end{equation}
+through deterministic two-loop Standard Model RG equations with stepwise thresholding for fermion and Higgs masses. Here $\Lambda$ and $g_U$ are sourced from \texttt{config/constants.json}, while $k_Y$ and $\Delta_2$ are sourced from the emitted artifacts listed below, with SHA-256 provenance recorded. For two-loop RG structure we follow standard references for the general two-loop framework \cite{MachacekVaughn1983,MachacekVaughn1984,MachacekVaughn1985}, and we note that SM running to high scales is widely tabulated in the literature (see e.g.\ \cite{Buttazzo2013}).
+
+Operationally, the repository RG pipeline:
+\begin{itemize}
+  \item sources $k_Y$ from \texttt{artifacts/ult\_kY\_pure.json};
+  \item sources $\Delta_2$ and $\mu_{\mathrm{on}}$ from \texttt{artifacts/ult\_delta2\_module.json};
+  \item records provenance of all sourced quantities in \texttt{artifacts/ult\_MZ\_observables.json}.
+\end{itemize}
+
+\subsection{Outputs}
+The pipeline outputs electroweak-scale quantities such as
+\begin{equation}
+\alpha_{\mathrm{em}}^{-1}(M_Z),\qquad \sin^2\theta_W(M_Z),\qquad \alpha_s(M_Z),
+\end{equation}
+and the corresponding $g_i(M_Z)$. These values are recorded (with provenance) in \texttt{\path{artifacts/ult_MZ_observables.json}}. For the present version we report the deterministic outputs produced by the repository script; we make no claim here of precision agreement with all PDG central values, as this depends on scheme and threshold modeling choices that can be refined without changing the lock mechanism.
+
+\section{Reproducibility and audit trail}
+The companion code repository is available at \url{https://github.com/dixonhammer/Spectral-Seed}.
+
+The exact repository snapshot corresponding to this manuscript is archived at Zenodo under DOI: \texttt{TBD} (release tag \texttt{v1.0.0}), ensuring commit-level reproducibility.
+
+The repository is organized into \texttt{src/} (scripts), \texttt{config/} (inputs), and \texttt{artifacts/} (generated outputs).
+
+\paragraph{Data provenance contract (sources of truth).}
+All inputs are read from \texttt{config/} and all derived quantities are written to \texttt{artifacts/}. In particular, the canonical pipeline treats the following as the authoritative emitted artifacts for the lock chain:
+\begin{itemize}
+  \item Trace invariants and anomaly checks: \texttt{artifacts/ult\_trace\_table.json} (emitted by \texttt{src/trace\_emit.py}).
+  \item Target-free hypercharge normalization: \texttt{\path{artifacts/ult_kY_pure.json}} (written by \texttt{src/ky\_pure.py}).
+  \item Discrete integer rule and $N$: \texttt{artifacts/ult\_sigma\_integer\_rule.json} (written by \texttt{src/sigma\_integer\_rule\_from\_trace.py}).
+  \item Module-derived $(\sigma_H,\mu_{\mathrm{on}},\Delta_2)$: \texttt{artifacts/ult\_delta2\_module.json} (written by \texttt{\path{src/delta2_from_module.py}}).
+\end{itemize}
+The RG stage then consumes these locked inputs together with declared configuration files
+(\texttt{config/constants.json}, \texttt{config/thresholds.json}, \texttt{config/highscale\_shifts.json})
+and produces the output artifact \texttt{artifacts/ult\_MZ\_observables.json} (written by \texttt{\path{src/rg_2loop_pipeline.py}}), recording SHA-256 provenance for all files read.
+
+A complete end-to-end reproduction from a clean clone is:
+\begin{verbatim}
+chmod +x reproduce.sh
+./reproduce.sh
+\end{verbatim}
+The script runs the canonical pipeline in order:
+\texttt{src/trace\_emit.py},
+\texttt{src/ky\_pure.py},
+\texttt{\path{src/sigma\_integer\_rule\_from\_trace.py}},
+\texttt{src/df\_build\_forced\_doublet.py},
+\texttt{\path{src/delta2\_from\_module.py}},
+\texttt{src/audit\_delta2\_lock.py},
+\texttt{src/platinum\_check.py},
+\texttt{\path{src/rg\_2loop\_pipeline.py}}.
+
+Each generated artifact records provenance and SHA-256 hashes of its relevant inputs. The audit scripts assert agreement between \texttt{config/locks.json} and the module-derived $\Delta_2$ chain.
+
+\section{Discussion and limitations}
+The present version isolates and locks the finite $SU(2)$ jump $\Delta_2$ in a way that is (i) parameter-free with respect to low-energy targets and (ii) audit-grade reproducible from discrete trace invariants. The finite Dirac artifact is intentionally minimal: it demonstrates how a module-forced sector fixes an onset scale and matching correction without claiming a full reconstruction of the Standard Model finite Dirac operator. We make no claim in this version of a complete Standard Model $D_F$ reconstruction or precision agreement with PDG observables; the contribution here is the discrete, auditable lock chain and its deterministic propagation.
+
+Immediate extensions include: (a) embedding the forced sector into a fuller finite Dirac operator with an index map covering additional SM subspaces, and (b) elevating the discrete rule for $N$ from an empirically successful trace formula to a theorem grounded in the underlying module classification.
+
+
+\bibliographystyle{unsrt}
+\bibliography{refs}
+
+\end{document}
