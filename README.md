@@ -165,3 +165,12 @@ pdflatex paper.tex
 ## License
 
 MIT License — see `LICENSE`.
+
+---
+
+## Zenodo Archival Note
+
+Zenodo archival trigger release (v1.0.1).
+
+Release `v1.0.1` contains no scientific or computational changes relative to `v1.0.0`.  
+It exists solely to trigger Zenodo DOI minting after enabling GitHub–Zenodo integration.
