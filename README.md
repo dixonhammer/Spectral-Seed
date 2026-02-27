@@ -41,6 +41,21 @@ README.md
 > Note: artifacts are **outputs**. By default, you generate them locally via `./reproduce.sh`.
 
 ---
+## Environment
+
+This pipeline has been tested on:
+
+- Python 3.12.x (macOS arm64)
+- Compatible with Python ≥3.11
+
+The code does not depend on experimental interpreter features.  
+Reproducibility has been verified under Python 3.12.2 using a clean virtual environment.
+
+To check your Python version:
+
+```bash
+python --version
+```
 
 ## Quickstart
 
