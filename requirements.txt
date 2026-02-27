@@ -1,0 +1,8 @@
+# Core numeric stack (needed)
+numpy>=1.24,<3.0
+
+# Optional but commonly needed for scientific utilities / future-proofing
+scipy>=1.10,<2.0
+
+# Not strictly required by your scripts, but useful for robustness/debugging
+pandas>=2.0,<3.0
