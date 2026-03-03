@@ -1,0 +1,93 @@
+{
+  "K_totals": {
+    "K1": 26.39695192027321,
+    "K2": 20.0,
+    "K3": 20.0,
+    "K_common": 20.0,
+    "kY": 1.3198475960136604
+  },
+  "U1_row_breakdown": [
+    {
+      "K1_piece": 1.3198475960136604,
+      "U1_raw": 0.5,
+      "Y": 0.16666666666666666,
+      "Y2": 0.027777777777777776,
+      "dim": 18,
+      "name": "Q_L"
+    },
+    {
+      "K1_piece": 3.9595427880409813,
+      "U1_raw": 1.5,
+      "Y": -0.5,
+      "Y2": 0.25,
+      "dim": 6,
+      "name": "L_L"
+    },
+    {
+      "K1_piece": 10.558780768109283,
+      "U1_raw": 4.0,
+      "Y": -0.6666666666666666,
+      "Y2": 0.4444444444444444,
+      "dim": 9,
+      "name": "u_R^c"
+    },
+    {
+      "K1_piece": 2.639695192027321,
+      "U1_raw": 1.0,
+      "Y": 0.3333333333333333,
+      "Y2": 0.1111111111111111,
+      "dim": 9,
+      "name": "d_R^c"
+    },
+    {
+      "K1_piece": 7.9190855760819625,
+      "U1_raw": 3.0,
+      "Y": 1.0,
+      "Y2": 1.0,
+      "dim": 3,
+      "name": "e_R^c"
+    }
+  ],
+  "anomalies_per_generation_LH": {
+    "SU2sq_U1": 0.0,
+    "SU3sq_U1": 0.0,
+    "U1_cubed": 0.0,
+    "grav2_U1": 0.0
+  },
+  "base_sums_over_3gens": {
+    "SU2_base_sum_Tfund": 6.0,
+    "SU3_base_sum_Tfund": 6.0,
+    "U1_base_sum_dimY2": 10.0
+  },
+  "forced_doublet_note": {
+    "anomaly_impact": "Because Y=0, adding the forced doublet contributes 0 to U(1)^3, grav^2-U(1), SU(2)^2-U(1), and SU(3)^2-U(1) local anomaly sums.",
+    "assumed_hypercharge": 0.0,
+    "sector": "H_doublet"
+  },
+  "module_normalizations": {
+    "K1_from_spectral_target": 26.39695192027321,
+    "K_common_target": 20.0,
+    "c1_U1": 2.639695192027321,
+    "c2_SU2": 3.3333333333333335,
+    "c3_SU3": 3.3333333333333335,
+    "meaning": "Normalization targets sourced from trace_summary invariants (not low-energy targets)."
+  },
+  "provenance": {
+    "fallback_used": {
+      "K1_from_spectral": false,
+      "K_common": false
+    },
+    "inputs": {
+      "locks": "config/locks.json"
+    },
+    "inputs_sha256": {
+      "locks": "5d614cceef74009eacbd70cb657ff6aa689bb4c2b6d1f20019f49ebb805cf4f7"
+    },
+    "meaning": "Trace table computed from explicit SM representation content. Module normalization targets (K_common, K1_from_spectral) are sourced from config/locks.json trace_summary to avoid hidden constants. kY is computed as kY = K1/K2 (derived, not targeted)."
+  },
+  "witten_SU2": {
+    "doublets_per_generation": 4,
+    "meaning": "Witten SU(2) global anomaly absent iff number of LH SU(2) doublets is even.",
+    "ok": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "Delta2_add_to_inv_alpha2": -2.3534464016282834,
+  "Lambda_GeV": 1.0225199171797158e+18,
+  "assumptions": {
+    "Delta2": "Delta2 = -(b2H/(4*pi))*ln(Lambda/mu_on)",
+    "b2H": 1.3333333333333333,
+    "definition": "sigma_H = smallest nonzero singular value of D_F restricted to H_doublet",
+    "mu_on": "mu_on = sigma_H * Lambda"
+  },
+  "mu_on_GeV": 238073970.4658547,
+  "provenance": {
+    "constants_lambda_key_used": "Lambda",
+    "inputs": {
+      "constants": "config/constants.json",
+      "df_npy": "artifacts/ult_DF_full.npy",
+      "index_map": "artifacts/ult_DF_index_map.json"
+    },
+    "inputs_sha256": {
+      "constants": "02a646d03008ce7f92555aeb7263b555575055099d6d924b73fa85212c4563de",
+      "df_npy": "5bb51489b553919e6b95a8adf04e29fb2485d355f62f0354705e5a69b4b44166",
+      "index_map": "48e99528e60370b66a5193e1579255d88aee976af1bd1cad3c73b6bf87489bf3"
+    },
+    "meaning": "\u03942 and \u03bc_on are computed module-natively from the forced-doublet block singular value and the locked unification scale \u039b. No low-energy targets are used."
+  },
+  "sigma_H": 2.3283064365386963e-10
+}

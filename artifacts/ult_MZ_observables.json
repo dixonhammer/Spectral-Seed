@@ -1,0 +1,43 @@
+{
+  "alpha_em_inv": 127.97625973894354,
+  "alpha_s": 0.11653266209000297,
+  "g_MZ": {
+    "g1": 0.41062256539662506,
+    "g2": 0.6514616135291403,
+    "g3": 1.2101209115211837
+  },
+  "note": {
+    "Lambda_key_used": "Lambda",
+    "MU_used_GeV": 1.0225199171797158e+18,
+    "deltas": {
+      "d1": 0.0,
+      "d2": -2.3534464016282834,
+      "d3": 0.0
+    },
+    "deltas_sha256": {
+      "d1": "895e2bb6ab8189421708052c9b3f9b4cab11d62be3304f30ea11c2fc716566d1",
+      "d2": "5b2869ee89dfaa03903c055eb9634aa2e791a98d0eeb9c96146a176fefc6a10b",
+      "d3": "895e2bb6ab8189421708052c9b3f9b4cab11d62be3304f30ea11c2fc716566d1"
+    },
+    "deltas_source": {
+      "d1": "config/highscale_shifts.json",
+      "d2": "artifacts/ult_delta2_module.json",
+      "d3": "config/highscale_shifts.json"
+    },
+    "gU_used": 0.496729413289805,
+    "inputs_sha256": {
+      "constants": "02a646d03008ce7f92555aeb7263b555575055099d6d924b73fa85212c4563de",
+      "delta2_module": "5b2869ee89dfaa03903c055eb9634aa2e791a98d0eeb9c96146a176fefc6a10b",
+      "highscale_shifts": "895e2bb6ab8189421708052c9b3f9b4cab11d62be3304f30ea11c2fc716566d1",
+      "kY_pure": "a00072159c495eae48c596a2cf8391191e70187ffb79a72e30e76dcfcd81191c",
+      "thresholds": "dcb75bee381c1bf084a50b8844b8defa72f887c881b6175794677e711d25472c"
+    },
+    "kY_sha256": "a00072159c495eae48c596a2cf8391191e70187ffb79a72e30e76dcfcd81191c",
+    "kY_source": "artifacts/ult_kY_pure.json",
+    "kY_used": 1.3198475960136604,
+    "module_delta2_sha256": "5b2869ee89dfaa03903c055eb9634aa2e791a98d0eeb9c96146a176fefc6a10b",
+    "module_mu_on_GeV": 238073970.4658547,
+    "ts": 1772557479.33059
+  },
+  "sin2_thetaW": 0.23136773209661793
+}

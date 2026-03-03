@@ -1,0 +1,8 @@
+{
+  "kY_star": 1.3198475960136604,
+  "provenance": {
+    "meaning": "kY_star is sourced ONLY from the trace artifact (module/trace invariant), with no MZ/targets language and no solver dependence.",
+    "source": "artifacts/ult_trace_table.json",
+    "source_sha256": "d5e59a5fc4153b4eb50d8c47784d462052e26598379a723b5910a4dd782e8008"
+  }
+}

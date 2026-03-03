@@ -1,0 +1,46 @@
+{
+  "basis_order": [
+    "H_L1",
+    "H_L2",
+    "H_R1",
+    "H_R2"
+  ],
+  "provenance": {
+    "inputs_present": {
+      "artifacts/ult_sigma_integer_rule.json": true,
+      "config/module_spec.json": false
+    },
+    "meaning": "sigma_H derived from module-native discrete rule file (preferred) or legacy module_spec (fallback)."
+  },
+  "sigma_H": 2.3283064365386963e-10,
+  "sigma_provenance": {
+    "N": 32,
+    "meaning": "Preferred path: N derived from trace/module invariants; no MZ targets.",
+    "sigma_definition": "sigma_H = 2^{-N}",
+    "sigma_policy": "from_trace_discrete_rule",
+    "source_file": "artifacts/ult_sigma_integer_rule.json",
+    "source_sha256": "f5e5d19b11dd789655dfb93fd518e664ea3791b76dfc2e1d784051f983519138"
+  },
+  "tags": {
+    "H_doublet": {
+      "L": [
+        0,
+        1
+      ],
+      "R": [
+        2,
+        3
+      ],
+      "SU2_rep": "doublet",
+      "SU3_rep": "singlet",
+      "Y": 0.0,
+      "all": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "note": "Forced neutral Dirac SU(2) doublet sector."
+    }
+  }
+}

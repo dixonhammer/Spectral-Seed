@@ -1,0 +1,16 @@
+{
+  "N": 32,
+  "inputs": {
+    "K_common": 20.0,
+    "SU2_base_sum_Tfund": 6.0
+  },
+  "note": "This file defines the discrete mapping used by the module-native \u03942 chain. A paper may later justify why this mapping is forced by the underlying module.",
+  "provenance": {
+    "meaning": "Rule-first artifact: N is computed from trace/module invariants only. No low-energy targets are used.",
+    "source": "artifacts/ult_trace_table.json",
+    "source_sha256": "d5e59a5fc4153b4eb50d8c47784d462052e26598379a723b5910a4dd782e8008"
+  },
+  "rule": "N = round(K_common + 2*SU2_base_sum_Tfund)",
+  "sigma_definition": "sigma_H = 2^{-N}",
+  "sigma_policy": "from_trace_discrete_rule"
+}
